@@ -6,7 +6,7 @@ class Ukulele_model extends CI_Model {
         parent::__construct();
     }
     function showAll(){
-        $query = $this->db->get('events', 10);
+        $query = $this->db->query("SELECT eventName FROM events ORDER BY eventDATETIME");
         return $query->result();
     }
                 
