@@ -2,7 +2,7 @@ $(document).ready(function(){
      
         d=1;
         lastStop=0;
-        dayNum= $('#1').val()
+        dayNum= eventByDay[1];
 
 
     
@@ -19,7 +19,7 @@ function next(){
 
     d++;
     lastStop=$('#lastStop').val();
-    dayNum= $('#'+d).val(); 
+    dayNum=  eventByDay[d];
       if (isNaN(dayNum)){
           location.reload(true);
       }
