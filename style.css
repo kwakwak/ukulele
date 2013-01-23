@@ -1,0 +1,16 @@
+/* 
+    Document   : style.css
+    Created on : 17/01/2013, 13:39:48
+    Author     : doctor
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+a.page_link.active_page { 
+    color: red;
+}
+
+p{
+    display: none;
+}
+
