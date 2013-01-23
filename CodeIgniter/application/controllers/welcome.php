@@ -19,7 +19,9 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+                                            $this->load->model('Ukulele_model', '', TRUE);
+                                            $data['result']=$this->Ukulele_model->showAll();
+		$this->load->view('welcome_message',$data);
 	}
 }
 
