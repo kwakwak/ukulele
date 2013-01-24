@@ -17,4 +17,5 @@ function previous() {
 function show(){
     $('p[id]').css('display', 'none');
     $('p[id='+day+']').css('display', 'block');
+    $('#date').html(day+"/1/13");
 }
