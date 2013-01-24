@@ -14,7 +14,7 @@ class ShowDay extends CI_Controller {
         $data['currentDay'] = $currentDay;
         
         $this->lang->load('showDay'); // lang for showday
-        $this->load->view('index', $data);
+        $this->load->view('showDay', $data);
     }
     
 }
