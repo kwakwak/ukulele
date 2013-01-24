@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "ukulele";
+$route['default_controller'] = "showDay";
 $route['404_override'] = '';
 
 

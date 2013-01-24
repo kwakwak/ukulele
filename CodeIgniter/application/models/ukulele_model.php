@@ -5,7 +5,7 @@ class Ukulele_model extends CI_Model {
     {
         parent::__construct();
     }
-    function showAll(){
+    function showMonth(){
         $query = $this->db->query("SELECT UNIX_TIMESTAMP(eventDATETIME) as eventDATETIME,eventName FROM events ORDER BY eventDATETIME");
         return $query->result();
     }       

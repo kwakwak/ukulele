@@ -1,6 +1,12 @@
 $(document).ready(function(){
+    nowDate = new Date();
+    
+    month= nowDate.getMonth()+1;
+    year=  nowDate.getFullYear();
+    
     lastDay=$('#lastDay').val();
     day=$('#currentDay').val();
+    if (day==0) day = nowDate.getDate();
     show();
 });
 
@@ -17,5 +23,5 @@ function previous() {
 function show(){
     $('p[id]').css('display', 'none');
     $('p[id='+day+']').css('display', 'block');
-    $('#date').html(day+"/1/13");
+    $('#date').html(day+"/"+month+"/"+year);
 }
