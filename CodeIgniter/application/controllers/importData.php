@@ -6,10 +6,10 @@ if (!defined('BASEPATH'))
 class ImportData extends CI_Controller {
 
     public function index() {
-
-                $data["result"]=$this->levontin();
-                $this->load->view('importRes', $data);
-
+        $this->load->helper('url'); // for base url in js link.
+        $this->lang->load('main');
+        $data["result"] = $this->levontin();
+        $this->load->view('importRes', $data);
     }
 
     public function levontin() {

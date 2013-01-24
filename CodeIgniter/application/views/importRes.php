@@ -12,7 +12,7 @@
             <h1><?php echo $this->lang->line('main_title')?></h1>
             <div id="body">
                 <pre>
-                    <?php echo $result ?>
+                    <?php  print_r($result) ?>
                 </pre>
             </div>
                 <p class="footer">
