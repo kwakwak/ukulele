@@ -1,0 +1,108 @@
+ <?php
+class Levontin7 extends CI_Model {
+
+    private $placeID =1; //
+    private $placeURL = "http://www.levontin7.com/calendar.asp";
+    private $placeProgram = array(); // All Events Array
+    private $descArr = array(); // All Description Array
+    private $eventArr = array(); // One Event Array
+
+
+    function __construct()
+    {
+        parent::__construct();
+        libxml_use_internal_errors(true);
+
+        try {
+            $doc = new DOMDocument();
+            $doc->loadHTMLFile($placeURL);  
+        } catch (Exception $e) {
+            return "Cant connect to URL: ".$e;
+        }
+
+        try {
+            $this->importDesc($doc); //import desc
+        } catch (Exception $e) {
+            return "Cant import description: ".$e;
+        }
+
+        try {
+            $this->descArr= $this->importEvents($doc); //import event
+        } catch (Exception $e) {
+            return "Cant import events: ".$e;
+        }
+    }
+   
+
+    private function importEvents() 
+    {
+        $eventNum=0;// Set General Event Number of all month
+        // for every day in month
+        for ($i = 1; $i <= 31; $i++) { 
+            // Get day from doc
+            $event = $doc->getElementById('z' . $i)->nodeValue;
+            // split day to bands
+            $bandNames = preg_split("/[0-2][0-9]\:[0-5][0-9]/", $event);
+            // get times
+            preg_match_all("/[0-2][0-9]\:[0-5][0-9]/", $event, $bandTimeArr);
+
+            $eventNumDay = 0; // Event Number in $i Day
+
+            foreach ($bandNames as $bandName) { // for each band in $i day
+                if ($bandName != "") {
+                    $this->textManipulation();
+                    $this->buildArr();
+                }
+            }
+        }
+        return $placeProgram;
+    }      
+
+    private loadDesc($doc) 
+    {
+        $xpath = new DOMXPath($doc);
+        $linkQuery = "//a[@class='jTip']/@href"; 
+        //find desc url
+        $links = $xpath->query($linkQuery);
+
+        foreach ($links as $link) {
+            $desLink = "http://www.levontin7.com/" . $link->nodeValue;
+            $data = file_get_contents($desLink);
+            array_push($this->descArr, $data);
+        }
+    }
+
+    private buildArr()
+    {
+        $eventArr["Place"] = $placeID;
+        $eventArr["Number"] = $eventNum;
+        $eventArr["Name"] = $bandName;
+        // DATETIME YYYY-MM-DD HH:MM:SS
+        $eventArr["DATETIME"] = date('Y-m-') . $i . " " . $bandTime;
+        $eventArr["Desc"] = $eventDescArr[$eventNum];
+        if (isset($eventPrice[0]))
+            $eventArr["Price"] = $eventPrice;
+        $eventArr["URL"] = "";
+
+        $eventNumDay++; // inc Event Number in $i Day
+        $eventNum++; // inc General Event Number
+        array_push($placeProgram, $eventArr);
+    }
+
+    private textManipulation()
+    {
+        // Find price from description
+        preg_match("/\ [\/\d\s]+ \₪/", $eventDescArr[$eventNum], $eventPriceArr); 
+        // Remove ₪ from price
+        if (isset($eventPriceArr[0]))
+            $eventPrice = preg_replace("/₪/", "", $eventPriceArr[0]); 
+        //Remove time and date from desc
+        $eventDescArr[$eventNum] = preg_replace("/(\\d+)(:)(\\d+)(.+)/", " ", $eventDescArr[$eventNum]); 
+        // Change time from 24:00 (not legal with mysql) to 23:50
+        $bandTime = $bandTimeArr[0][$eventNumDay];
+        if ($bandTime == "24:00")
+            $bandTime = "23:50";
+
+    }
+}
+?>
